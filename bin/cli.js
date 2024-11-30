@@ -8,7 +8,7 @@ const templateDir = path.join(__dirname, '..'); // Root folder of your setup
 const args = process.argv.slice(2);
 
 if (args.length === 0) {
-    console.log('Usage: mysql-code <project-name>');
+    console.log('Usage: mysql-code-generator <project-name>');
     process.exit(1);
 }
 
