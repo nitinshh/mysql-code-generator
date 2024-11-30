@@ -15,12 +15,7 @@ Example .env file for easy environment configuration.
 Run the following command to install the setup directly into your project:
 
 ```bash
- npm install mysql-code-generator
-```
-After installing the package, run the following npx command to generate the full setup in your project directory:
-
-```bash
- npx mysql-code <project-name>
+ npx mysql-code-generator <project-name>
 ```
 
 2. Configure the .env File
