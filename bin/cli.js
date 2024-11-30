@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 const templateDir = path.join(__dirname, '..'); // Root folder of your setup
 const args = process.argv.slice(2);
@@ -21,37 +20,41 @@ if (fs.existsSync(targetDir)) {
 }
 
 try {
-    // Function to recursively copy files and exclude certain files
+    // Function to recursively copy files and directories
     const copyRecursiveSync = (src, dest) => {
         const entries = fs.readdirSync(src, { withFileTypes: true });
         for (let entry of entries) {
             const srcPath = path.join(src, entry.name);
             const destPath = path.join(dest, entry.name);
 
-            // Exclude bin/cli.js and any other files you don't want to copy
-            if (entry.name === 'cli.js') continue;
+            // Exclude 'cli.js' and 'README.md' from being copied
+            if (entry.isFile() && (entry.name === 'cli.js' || entry.name === 'README.md')) {
+                continue;
+            }
 
             if (entry.isDirectory()) {
                 fs.mkdirSync(destPath, { recursive: true });
                 copyRecursiveSync(srcPath, destPath);
             } else {
+                // Copy all other files including 'bin/www'
                 fs.copyFileSync(srcPath, destPath);
             }
         }
     };
 
-    // Create the project directory
+    // Create the target directory for the new project
     fs.mkdirSync(targetDir, { recursive: true });
 
-    // Copy all necessary files, excluding bin/cli.js
+    // Copy all necessary files from the template to the new project directory
     copyRecursiveSync(templateDir, targetDir);
 
-    // Create the desired package.json file for the generated project
+    console.log(`Project setup created at "${targetDir}"`);
+
+    // Custom package.json to be created in the new project folder
     const packageJson = {
         name: projectName,
         version: "1.0.0",
-        description: "A Node.js project setup with MySQL, Sequelize, and authentication features.",
-        main: "bin/cli.js",
+        description: "A CLI tool to generate a Node.js project setup with MySQL, Sequelize, and authentication features.",
         scripts: {
             start: "nodemon ./bin/www"
         },
@@ -77,18 +80,12 @@ try {
         }
     };
 
-    // Write the new package.json to the target project folder
+    // Write the custom package.json to the new project folder
     fs.writeFileSync(path.join(targetDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 
-    console.log(`Project setup created at "${targetDir}"`);
-
-    // Install dependencies
-    console.log('Installing dependencies...');
-    execSync('npm install', { cwd: targetDir, stdio: 'inherit' });
-
-    console.log('Setup complete! Start your project with:');
+    console.log('Project setup complete!');
+    console.log('You can now navigate to the project folder and run "npm install" to install dependencies.');
     console.log(`cd ${projectName}`);
-    console.log('npm start');
 } catch (error) {
     console.error('Error:', error.message);
     process.exit(1);
