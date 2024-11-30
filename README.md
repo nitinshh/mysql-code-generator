@@ -18,7 +18,20 @@ Run the following command to install the setup directly into your project:
  npx mysql-code-generator <project-name>
 ```
 
-2. Configure the .env File
+2. Install Dependencies
+Ensure all dependencies are installed by navigating to the project directory and running:
+
+```bash
+ npm install
+```
+
+3. Start the Server
+
+```bash
+ npm start
+```
+
+4. Configure the .env File
 After installation, a .env file will be included in the root directory. Update the file with your specific environment variables.
 
 Example .env file:
@@ -51,23 +64,6 @@ TWILIO_SERVICE_SID = YOUR_TWILIO_SERVICE_SID
 ```
 
 
-3. Install Dependencies
-Ensure all dependencies are installed by navigating to the project directory and running:
-
-```bash
- npm install
-```
-
-4. Start the Server
-In development mode:
-```bash
- npm run dev
-```
-
-In production mode:
-```bash
- npm start
-```
 # Directory Structure
 
 ```bash
