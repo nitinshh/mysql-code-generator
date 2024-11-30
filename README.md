@@ -16,6 +16,7 @@ Run the following command to install the setup directly into your project:
 
 ```bash
  npx mysql-code-generator <project-name>
+ cd <project-name>
 ```
 
 2. Install Dependencies
