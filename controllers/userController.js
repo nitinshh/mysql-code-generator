@@ -191,8 +191,8 @@ module.exports = {
       const { id, newPassword, confirmPassword } = payload;
 
       if (newPassword !== confirmPassword) {
-        return res.render("passwordNotMatch");
-      }
+        return commonHelper.failed(res, Response.failed_msg.pwdNoMatch);
+    }
 
       const user = await Models.userModel.findOne({
         where: { id: id },
