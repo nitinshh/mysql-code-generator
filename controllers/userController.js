@@ -10,7 +10,7 @@ const otpManager = require("node-twillo-otp-manager")(
 );
 const secretKey = process.env.SECRET_KEY;
 
-const commonHelper = require("../helpers/commonHelper.js.js");
+const commonHelper = require("../helpers/commonHelper.js");
 const helper = require("../helpers/validation.js");
 const Models = require("../models/index");
 const Response = require("../config/responses.js");

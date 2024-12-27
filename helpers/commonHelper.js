@@ -3,7 +3,7 @@ const { v4: uuid } = require("uuid");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
-const emailTamplate = require("../helpers/emailTemplate/forgetPassword");
+const emailTamplate = require("./emailTemplate/forgetPassword");
 
 module.exports = {
   success: async (res, message, body = {}) => {
