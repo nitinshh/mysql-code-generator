@@ -80,7 +80,7 @@ module.exports = {
       });
       let payload = await helper.validationJoi(req.body, schema);
 
-      const { email, password, devideToken, deviceType } = payload;
+      const { email, password, deviceToken, deviceType } = payload;
 
       const user = await Models.userModel.findOne({
         where: { email: email },
@@ -229,8 +229,8 @@ module.exports = {
     try {
       const schema = Joi.object().keys({
         deviceToken: Joi.string().required(),
-        // devideToken: 'abc',
-        devideType: Joi.string().optional(),
+        // deviceToken: 'abc',
+        deviceType: Joi.string().optional(),
       });
 
       let payload = await helper.validationJoi(req.body, schema);

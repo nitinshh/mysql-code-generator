@@ -8,31 +8,46 @@ const emailTamplate = require("./emailTemplate/forgetPassword");
 module.exports = {
   success: async (res, message, body = {}) => {
     try {
-      return res.status(200).json({ message, body });
+      return res.status(200).json({  
+        'success': true,
+        'code': 200,
+        'message': message,
+        'body': body
+      });
     } catch (error) {
       console.log(error);
       throw error;
     }
   },
 
-  failed: async (res, message, body = {}) => {
+  failed: async (res, msg, body = {}) => {
     try {
-      return res.status(400).json({ message, body });
+      return res.status(400).json({ 
+        'success': false,
+        'message': msg,
+        'code': 400,
+        'body': {}
+       });
     } catch (error) {
       console.log(error);
       throw error;
     }
   },
 
-  error: async (res, message, body = {}) => {
+  error: async (res, msg, body = {}) => {
     try {
-      return res.status(500).json({ message, body });
+      return res.status(500).json({ 
+        'success': false,
+        'message': msg,
+        'code': 500,
+        'body': {}
+      });
     } catch (error) {
       console.log(error);
       throw error;
     }
   },
-
+  
   fileUpload: async (file, folder = "images") => {
     try {
       if (!file || file.name === "") return null;
