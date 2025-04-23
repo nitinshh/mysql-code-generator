@@ -68,7 +68,6 @@ TWILIO_SERVICE_SID = YOUR_TWILIO_SERVICE_SID
 # Directory Structure
 
 ```bash
-├── bin/                # Server startup scripts
 ├── config/             # Configuration files
 ├── controllers/        # Business logic for 
 ├── helpers/            # Utility functions
@@ -82,6 +81,72 @@ TWILIO_SERVICE_SID = YOUR_TWILIO_SERVICE_SID
 ├── package.json        # Project metadata and dependencies
 ├── package-lock.json   # Dependency lock file
 └── .env                # Environment variables
+```
+
+# Cluster Support in Latest Version
+
+```
+In the latest version, we have implemented clustering to handle increased traffic and maximize CPU usage efficiently.
+
+Let’s Pretend You Own a Pizza Shop
+You’re the only one working:
+You take orders
+
+You make the pizza
+
+You serve the pizza
+
+This is like a normal Node.js app — single-threaded, doing one thing at a time.
+
+Now Let’s Say Business Is Booming…
+Customers are coming in like crazy, and you can’t keep up!
+
+Option 1: You Hire a Helper Just for One Job
+Let’s say someone orders a birthday pizza that takes longer to make.
+
+You say:
+
+“Hey, I’ll hire someone to handle just this one order!”
+
+This helper will:
+
+Take the order
+
+Make the pizza
+
+Come back and say, “Done!”
+
+This is like a Child Process in Node.js.
+
+✅ Use it when:
+
+You have a big job (like resizing images or running a slow task)
+
+You don’t want your main app to stop
+
+Option 2: You Hire Many Pizza Makers for All Orders
+You now have 4 ovens (like 4 CPU cores) and you hire 4 cooks.
+
+Each cook handles any order that comes in — so customers don’t have to wait long.
+
+This is called Clustering in Node.js.
+
+✅ Use it when:
+
+Your app gets lots of users at once
+
+You want to use all your computer power (CPU cores)
+
+Quick Recap:
+
+Real World	Node.js Thing Why You Use It
+One-time helper	child_process	Handle big or slow jobs
+Multiple cooks	cluster	Handle lots of traffic
+
+Why Use Clustering?
+You have multiple CPU cores and want to utilize them fully.
+
+You have many concurrent requests and want to handle them without blocking each other.
 ```
 
 The following npm packages are included in this setup:
