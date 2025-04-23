@@ -66,6 +66,8 @@ try {
             dotenv: "^16.4.5",
             ejs: "^3.1.10",
             express: "^4.21.1",
+            "express-rate-limit": "^7.5.0",
+            "helmet": "^8.1.0",
             "express-fileupload": "^1.5.1",
             "http-errors": "^2.0.0",
             joi: "^17.13.3",

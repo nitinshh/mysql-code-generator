@@ -149,6 +149,25 @@ You have multiple CPU cores and want to utilize them fully.
 You have many concurrent requests and want to handle them without blocking each other.
 ```
 
+# 🔒 Security Enhancements
+
+```
+✅ Express Rate Limit
+Prevents abuse and DDoS attacks by limiting repeated requests from the same IP:
+
+Limits each IP to 100 requests per 15 minutes by default.
+
+Easy to configure.
+
+✅ Helmet
+Helps secure your app by setting various HTTP headers:
+
+Includes protections like XSS, Clickjacking, Content Security Policy, and more.
+
+Comes pre-configured with reasonable defaults, but also customizable.
+
+```
+
 The following npm packages are included in this setup:
 
 ```
