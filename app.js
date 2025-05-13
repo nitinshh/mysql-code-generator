@@ -1,18 +1,24 @@
 const cluster = require("cluster");
 const os = require("os");
 const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
+const { createAdapter, setupPrimary } = require("@socket.io/cluster-adapter");
 
-if (cluster.isMaster) {
+if (cluster.isPrimary) {
   const numCPUs = os.cpus().length;
   console.log(`Number of CPUs: ${numCPUs}`);
-  console.log(`Master ${process.pid} is running`);
+  console.log(`Primary ${process.pid} is running`);
   console.log(`Forking ${numCPUs} workers...`);
+
+  // Setup for socket.io cluster adapter
+  setupPrimary(); // <--- THIS IS REQUIRED
 
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
 
-  cluster.on("exit", (worker, code, signal) => {
+  cluster.on("exit", (worker) => {
     console.log(`Worker ${worker.process.pid} died. Forking a new one...`);
     cluster.fork();
   });
@@ -33,43 +39,38 @@ if (cluster.isMaster) {
   const { connectdb } = require("./dbConnection");
 
   const app = express();
-  const PORT = process.env.PORT || 4000;
+  const server = http.createServer(app);
+  const io = socketIo(server, {
+    transports: ["websocket"], // recommended for better performance
+  });
 
-  connectdb();
+  io.adapter(createAdapter()); // <--- CLUSTER ADAPTER
 
-  // Set EJS as view engine
+  require("./socket")(io); // Custom socket handler
+
+  // Standard Express setup
   app.set("view engine", "ejs");
   app.set("views", path.join(__dirname, "views"));
 
-  // Global Middlewares
   app.use(logger("dev"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, "public")));
+  app.use(helmet());
 
-  app.use(helmet()); // Security headers
-
-  // Rate Limiter
   const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 100,
     standardHeaders: true,
     legacyHeaders: false,
     message: "Too many requests from this IP, please try again later.",
   });
 
-  app.use(limiter); // Apply to all routes
+  app.use(limiter);
 
-  // File Upload
-  app.use(
-    fileUpload({
-      useTempFiles: true,
-      tempFileDir: "/tmp/",
-    })
-  );
+  app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
-  // Swagger Docs
   const swaggerOptions = {
     explorer: true,
     swaggerOptions: {
@@ -81,15 +82,11 @@ if (cluster.isMaster) {
   };
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(null, swaggerOptions));
-
-  // Routes
   app.use("/", indexRouter);
   app.use("/users", usersRouter);
 
-  // 404 Handler
   app.use((req, res, next) => next(createError(404)));
 
-  // Error Handler
   app.use((err, req, res, next) => {
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
@@ -97,8 +94,9 @@ if (cluster.isMaster) {
     res.render("error");
   });
 
-  // Start Server
-  app.listen(PORT, () => {
+  // Start the server
+  const PORT = process.env.PORT || 4000;
+  server.listen(PORT, () => {
     console.log(`✅ Worker ${process.pid} running on port ${PORT}`);
   });
 }

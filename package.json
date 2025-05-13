@@ -1,6 +1,6 @@
 {
   "name": "mysql-code-generator",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A CLI tool to generate a Node.js project setup with MySQL, Sequelize, and authentication features.",
   "main": "bin/cli.js",
   "bin": {
@@ -10,6 +10,7 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "@socket.io/cluster-adapter": "^0.2.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "crypto": "^1.0.1",
@@ -29,7 +30,9 @@
     "nodemailer": "^6.9.16",
     "nodemon": "^3.1.7",
     "sequelize": "^6.37.5",
-    "swagger-ui-express": "^5.0.1"
+    "socket.io": "^4.8.1",
+    "swagger-ui-express": "^5.0.1",
+    "uws": "^200.0.0"
   },
   "files": [
     "bin/www",
